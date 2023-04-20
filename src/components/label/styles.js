@@ -2,8 +2,6 @@
 import { alpha, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 
-// ----------------------------------------------------------------------
-
 export const StyledLabel = styled(Box)(({ theme, ownerState }) => {
   const isLight = theme.palette.mode === 'light';
 
@@ -23,7 +21,9 @@ export const StyledLabel = styled(Box)(({ theme, ownerState }) => {
       }),
       // SOFT
       ...(softVariant && {
-        color: isLight ? theme.palette.text.primary : theme.palette.common.white,
+        color: isLight
+          ? theme.palette.text.primary
+          : theme.palette.common.white,
         backgroundColor: alpha(theme.palette.grey[500], 0.16),
       }),
     }),

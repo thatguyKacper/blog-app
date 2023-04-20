@@ -1,5 +1,11 @@
+import { useEffect, useState } from 'react';
+
 // @mui
 import { Grid, Button, Container, Stack, Typography } from '@mui/material';
+// firebase
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { db } from '../firebase.config';
+
 // components
 import Iconify from '../components/iconify';
 import {
@@ -14,23 +20,37 @@ const SORT_OPTIONS = [
   { value: 'oldest', label: 'Oldest' },
 ];
 
-const POSTS = [
-  {
-    id: 1,
-    cover: `/assets/images/covers/cover_1.jpg`,
-    title: 'Test post',
-    view: 1,
-    comment: 0,
-    share: 0,
-    favorite: 1,
-    author: {
-      name: 'John Doe',
-      avatarUrl: `/assets/images/avatars/avatar_1.jpg`,
-    },
-  },
-];
-
 export default function BlogPage() {
+  const [posts, setPosts] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const postsRef = collection(db, 'posts');
+
+        const q = query(postsRef, orderBy('createdAt', 'desc'), limit(10));
+
+        const querySnap = await getDocs(q);
+
+        const postsArr = [];
+
+        querySnap.forEach((post) =>
+          postsArr.push({
+            id: post.id,
+            data: post.data(),
+          })
+        );
+
+        setPosts(postsArr);
+        setLoading(false);
+      } catch (error) {
+        console.log('nothing here');
+      }
+    };
+    fetchPosts();
+  }, []);
+
   return (
     <>
       <title> Dashboard: Blog </title>
@@ -59,15 +79,20 @@ export default function BlogPage() {
           alignItems="center"
           justifyContent="space-between"
         >
-          <BlogPostsSearch posts={POSTS} />
+          {/* <BlogPostsSearch posts={posts} /> */}
           <BlogPostsSort options={SORT_OPTIONS} />
         </Stack>
 
-        <Grid container spacing={3}>
-          {POSTS.map((post, index) => (
-            <BlogPostCard key={post.id} post={post} index={index} />
-          ))}
-        </Grid>
+        {loading ? (
+          // eslint-disable-next-line react/jsx-no-useless-fragment
+          <p>Loading</p>
+        ) : (
+          <Grid container spacing={3}>
+            {posts.map((post, index) => (
+              <BlogPostCard key={post.id} post={post} index={index} />
+            ))}
+          </Grid>
+        )}
       </Container>
     </>
   );

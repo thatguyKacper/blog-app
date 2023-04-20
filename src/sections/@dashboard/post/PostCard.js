@@ -14,8 +14,6 @@ import {
 import SvgColor from '../../../components/svg-color';
 import Iconify from '../../../components/iconify';
 
-// ----------------------------------------------------------------------
-
 const StyledCardMedia = styled('div')({
   position: 'relative',
   paddingTop: 'calc(100% * 3 / 4)',
@@ -60,11 +58,11 @@ PostCard.propTypes = {
 };
 
 export default function PostCard({ post, index }) {
-  const { cover, title, view, comment, share, author } = post;
+  const { cover, title, views, comments, share, author } = post.data;
 
   const POST_INFO = [
-    { number: comment, icon: 'eva:message-circle-fill' },
-    { number: view, icon: 'eva:eye-fill' },
+    { number: comments, icon: 'eva:message-circle-fill' },
+    { number: views, icon: 'eva:eye-fill' },
     { number: share, icon: 'eva:share-fill' },
   ];
 

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 // @mui
-import { alpha } from '@mui/material/styles';
 import {
   Box,
   Divider,
@@ -56,7 +55,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar alt="photoURL" />
+        <Avatar src="/assets/images/avatars/avatar_1.jpg" alt="photoURL" />
       </IconButton>
 
       <Popover
